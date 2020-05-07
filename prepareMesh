@@ -1,0 +1,44 @@
+import bpy
+import sys 
+import bmesh
+
+#argv = sys.argv
+#argv = argv[argv.index("--") + 1:]
+#bpy.ops.import_scene.fbx( filepath = argv[0] )
+                
+def GetAllMeshes():
+    
+    
+    meshes = bpy.data.objects
+    i = 0 
+    for m in meshes:
+        if m.type == 'MESH':
+            print(m.name)
+            bpy.context.view_layer.objects.active = m
+            bpy.context.scene.frame_set(i)
+            m.select_set(True)
+            bpy.ops.object.mode_set(mode='OBJECT')
+            bpy.ops.object.editmode_toggle()
+            bpy.ops.mesh.select_all(action='SELECT')
+            bpy.ops.mesh.normals_make_consistent(inside=False)
+            bpy.ops.uv.select_all(action='SELECT')
+            bpy.ops.uv.pack_islands(rotate = False)
+            #bpy.ops.uv.pack_islands(rotate = False)
+            bpy.ops.uv.select_all(action='DESELECT')
+            bpy.ops.mesh.select_all(action='DESELECT')
+            bmesh.update_edit_mesh(m.data)
+            bpy.ops.object.editmode_toggle()
+            m.select_set(False)
+            bpy.ops.object.select_all(action='DESELECT')
+            i = i + 61
+        
+        
+
+                 
+GetAllMeshes()
+
+#bpy.ops.export_scene.fbx( filepath = argv[1] , apply_scale_options='FBX_SCALE_UNITS') 
+
+
+#sys.exit(0)
+#bpy.ops.wm.quit_blender()
